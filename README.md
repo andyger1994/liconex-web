@@ -26,7 +26,7 @@ Cinco soluciones: videovigilancia, control de acceso, alarmas/perímetros, integ
 
 La cobertura nacional, el servicio de monitoreo y la auditoría de instalaciones con los departamentos Comercial, Ingeniería e Instalaciones fueron confirmados por el propietario. No se afirman tiempos de respuesta, certificaciones ni marcas asociadas. Las fotografías son ilustrativas; no se presentan como instalaciones de Liconex.
 
-El formulario prepara un mensaje para WhatsApp y el usuario confirma su envío allí. No hay base de datos del formulario. Google Analytics aún no se incorporó a esta nueva versión.
+El formulario prepara un mensaje para WhatsApp y el usuario confirma su envío allí. No hay base de datos del formulario. Google Analytics 4 integrado en todas las páginas con el ID G-SGQX234Y86; Google signals y personalización publicitaria deshabilitados en la etiqueta.
 
 ## Migración
 
