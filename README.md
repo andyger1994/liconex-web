@@ -31,3 +31,4 @@ El formulario prepara un mensaje para WhatsApp y el usuario confirma su envío a
 ## Migración
 
 La nueva web reemplaza los contenidos de la anterior. No incluye la calculadora de consumo ni la aplicación de gestión con usuarios. Conservar el despliegue anterior de Vercel como respaldo de recuperación.
+`whatsapp_click` y `phone_click` miden intentos de contacto en GA4. No confirman mensajes enviados ni llamadas completadas. Para Google Ads falta vincular GA4 e importar las acciones correspondientes. Los eventos no incluyen contenido del formulario; el respaldo de WhatsApp no duplica el evento inicial.

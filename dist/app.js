@@ -20,4 +20,46 @@ const requestedSegment = new URLSearchParams(window.location.search).get('segmen
 if(segmentField && [...segmentField.options].some(option=>option.value===requestedSegment)){segmentField.value=requestedSegment;}
 const solutionField=document.querySelector('select[name="solution"]');
 if(solutionField && new URLSearchParams(window.location.search).get('solution')==='monitoreo'){solutionField.value='Monitoreo 24/7';}
-document.getElementById('project-form')?.addEventListener('submit', e=>{e.preventDefault();const form=e.currentTarget;if(!form.reportValidity())return;const data=new FormData(form);const message=`Hola, soy ${data.get('name')} de ${data.get('company')||'un proyecto particular'}.\nTipo de espacio: ${segmentField?.selectedOptions[0]?.textContent||'A definir'}.\nEtapa: ${data.get('stage')}.\nQuiero consultar por ${data.get('solution')}.\nUbicación: ${data.get('location')}.\nContacto: ${data.get('email')}.\n${data.get('message')||''}`;const url='https://wa.me/59899204188?text='+encodeURIComponent(message);const link=document.getElementById('whatsapp-link');link.href=url;link.hidden=false;document.getElementById('form-status').textContent='Tu consulta está preparada. Abrí WhatsApp para revisarla y enviarla.';window.open(url,'_blank','noopener,noreferrer');});
+function trackContact(method, placement) {
+  if (typeof window.gtag !== 'function') return;
+  window.gtag('event', method === 'whatsapp' ? 'whatsapp_click' : 'phone_click', {
+    send_to: 'G-SGQX234Y86',
+    contact_method: method,
+    contact_placement: placement,
+    transport_type: 'beacon'
+  });
+}
+
+document.addEventListener('click', event => {
+  const link = event.target.closest?.('a[href]');
+  if (!link || link.id === 'whatsapp-link') return;
+  const href = link.getAttribute('href');
+  if (href.startsWith('tel:')) {
+    trackContact('phone', link.closest('.topbar') ? 'header' : 'contact');
+  } else if (/^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)) {
+    trackContact('whatsapp', 'link');
+  }
+});
+
+// Keep the message out of hyperlink URLs so automatic outbound-click measurement
+// cannot collect names, email addresses or the form's free text.
+let pendingWhatsAppUrl = '';
+const whatsappFallback = document.getElementById('whatsapp-link');
+whatsappFallback?.addEventListener('click', event => {
+  event.preventDefault();
+  if (pendingWhatsAppUrl) window.open(pendingWhatsAppUrl, '_blank', 'noopener,noreferrer');
+});
+
+document.getElementById('project-form')?.addEventListener('submit', event => {
+  event.preventDefault();
+  const form = event.currentTarget;
+  if (!form.reportValidity()) return;
+  const data = new FormData(form);
+  const message = `Hola, soy ${data.get('name')} de ${data.get('company') || 'un proyecto particular'}.\nTipo de espacio: ${segmentField?.selectedOptions[0]?.textContent || 'A definir'}.\nEtapa: ${data.get('stage')}.\nQuiero consultar por ${data.get('solution')}.\nUbicación: ${data.get('location')}.\nContacto: ${data.get('email')}.\n${data.get('message') || ''}`;
+  pendingWhatsAppUrl = 'https://wa.me/59899204188?text=' + encodeURIComponent(message);
+  whatsappFallback.href = 'https://wa.me/59899204188';
+  whatsappFallback.hidden = false;
+  document.getElementById('form-status').textContent = 'Tu consulta está preparada. Abrí WhatsApp para revisarla y enviarla.';
+  trackContact('whatsapp', 'project_form');
+  window.open(pendingWhatsAppUrl, '_blank', 'noopener,noreferrer');
+});
