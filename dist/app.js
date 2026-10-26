@@ -37,7 +37,7 @@ document.addEventListener('click', event => {
   if (href.startsWith('tel:')) {
     trackContact('phone', link.closest('.topbar') ? 'header' : 'contact');
   } else if (/^https:\/\/(wa\.me|api\.whatsapp\.com)\//.test(href)) {
-    trackContact('whatsapp', 'link');
+    trackContact('whatsapp', link.dataset.contactPlacement || 'link');
   }
 });
 
