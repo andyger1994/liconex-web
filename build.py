@@ -65,5 +65,7 @@ privacy.joinpath('index.html').write_text(head('Información de privacidad | Lic
 paths.append('/privacidad/')
 paths.extend(create_pages(ROOT,ORIGIN,head,header,footer,services))
 apply_updates(ROOT)
+from store_soon import create_store_soon
+paths.append(create_store_soon(ROOT,head,header,footer))
 (ROOT/'sitemap.xml').write_text('<?xml version="1.0" encoding="UTF-8"?><urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">'+''.join(f'<url><loc>{ORIGIN}{p}</loc></url>' for p in paths)+'</urlset>',encoding='utf-8')
 (ROOT/'robots.txt').write_text(f'User-agent: *\nAllow: /\nSitemap: {ORIGIN}/sitemap.xml\n',encoding='utf-8')
