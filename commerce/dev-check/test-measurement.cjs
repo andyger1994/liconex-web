@@ -1,0 +1,10 @@
+const fs=require('fs'),vm=require('vm'),assert=require('assert');
+const source=fs.readFileSync('commerce/theme/liconex-shop/assets/measurement.js','utf8');
+let sent=[],store=new Map(),listeners={},ajax;
+const sandbox={window:{lxCommerceEvents:[{name:'purchase',data:{transaction_id:'LX-test',value:12,currency:'USD',items:[]}}],gtag:(...args)=>sent.push(args),jQuery:()=>({on:(_,fn)=>ajax=fn})},document:{body:{},addEventListener:(name,fn)=>listeners[name]=fn},sessionStorage:{getItem:k=>store.get(k),setItem:(k,v)=>store.set(k,v)}};
+vm.runInNewContext(source,sandbox); vm.runInNewContext(source,sandbox);
+assert.equal(sent.filter(e=>e[1]==='purchase').length,1);
+listeners.click({target:{closest:()=>({getAttribute:()=> 'https://wa.me/59899204188?text=private',closest:()=>null})}});
+assert.equal(sent.at(-1)[1],'whatsapp_click');assert(!JSON.stringify(sent.at(-1)).includes('private'));
+ajax(null,null,null,{attr:key=>key==='data-product_id'?'2194':'2'});assert.equal(sent.at(-1)[1],'add_to_cart');assert.equal(sent.at(-1)[2].items[0].quantity,2);
+console.log('PASS purchase reload deduplication; contact no PII; successful AJAX cart event quantity');

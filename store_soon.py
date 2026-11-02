@@ -2,9 +2,7 @@ def create_store_soon(root, head, header, footer):
     header = header.replace('<a href="/#metodo">Cómo trabajamos</a>', '<a href="/soluciones/monitoreo-24-7/">Monitoreo 24/7</a>')
     page = root / 'tienda'
     page.mkdir(exist_ok=True)
-    body = '<main id="main" class="wrap"><h1>Tienda Liconex</h1><p>La tienda ya está disponible.</p><a class="btn" href="https://tienda.liconex.uy/">Entrar a la tienda</a></main>'
-    redirect = '<meta http-equiv="refresh" content="0;url=https://tienda.liconex.uy/">'
-    page.joinpath('index.html').write_text(head('Tienda Liconex', 'Equipos de seguridad electrónica Liconex.', '/tienda/').replace('</head>', redirect + '</head>') + header + body + footer, encoding='utf-8')
+    page.joinpath('index.html').write_text('<!doctype html><html lang="es"><head><meta charset="utf-8"><meta http-equiv="refresh" content="0;url=https://tienda.liconex.uy/"><title>Tienda Liconex</title><link rel="canonical" href="https://tienda.liconex.uy/"></head><body><p><a href="https://tienda.liconex.uy/">Entrar a la tienda Liconex</a></p></body></html>', encoding='utf-8')
     for path in root.rglob('*.html'):
         html = path.read_text(encoding='utf-8')
         html = html.replace('<a href="/profesionales/">Profesionales</a></nav>', '<a href="/profesionales/">Profesionales</a><a href="https://tienda.liconex.uy/"' + (' aria-current="page"' if path == page / 'index.html' else '') + '>Tienda</a></nav>')
